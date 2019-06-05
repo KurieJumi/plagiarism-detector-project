@@ -40,5 +40,6 @@ class BinaryClassifier(nn.Module):
         
         # define the feedforward behavior
         
+        
         return x
     
