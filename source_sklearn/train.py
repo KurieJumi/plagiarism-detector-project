@@ -43,7 +43,7 @@ if __name__ == '__main__':
     parser.add_argument('--data-dir', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
     
     ## TODO: Add any additional arguments that you will need to pass into your model
-    # should probably set some arguments
+
     
     # args holds all passed-in arguments
     args = parser.parse_args()
