@@ -3,11 +3,15 @@ from __future__ import print_function
 import argparse
 import os
 import pandas as pd
+import numpy as np
 
 from sklearn.externals import joblib
 
-## TODO: Import any additional libraries you need to define a model
+# reference : https://sagemaker.readthedocs.io/en/stable/using_sklearn.html
+# sklearn reference : https://scikit-learn.org/stable/modules/neural_networks_supervised.html
 
+## TODO: Import any additional libraries you need to define a model
+from sklearn.neural_network import MLPClassifier
 
 # Provided model load function
 def model_fn(model_dir):
@@ -39,6 +43,7 @@ if __name__ == '__main__':
     parser.add_argument('--data-dir', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
     
     ## TODO: Add any additional arguments that you will need to pass into your model
+    # should probably set some arguments
     
     # args holds all passed-in arguments
     args = parser.parse_args()
@@ -46,6 +51,7 @@ if __name__ == '__main__':
     # Read in csv training file
     training_dir = args.data_dir
     train_data = pd.read_csv(os.path.join(training_dir, "train.csv"), header=None, names=None)
+    print("training path specified : " + train_data)
 
     # Labels are in the first column
     train_y = train_data.iloc[:,0]
@@ -54,13 +60,23 @@ if __name__ == '__main__':
     
     ## --- Your code here --- ##
     
+    # I don't do anything just watch to see if it runs
 
     ## TODO: Define a model 
-    model = None
+    # model = None    
+    model = MLPClassifier(hidden_layer_sizes=(30,30,30), solver='lbfgs')
     
-    
+    ''' # Need to add some arguments we want to pass...
+    MLPClassifier(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
+       beta_2=0.999, early_stopping=False, epsilon=1e-08,
+       hidden_layer_sizes=(30, 30, 30), learning_rate='constant',
+       learning_rate_init=0.001, max_iter=200, momentum=0.9,
+       nesterovs_momentum=True, power_t=0.5, random_state=None,
+       shuffle=True, solver='adam', tol=0.0001, validation_fraction=0.1,
+       verbose=False, warm_start=False) 
+    '''
     ## TODO: Train the model
-    
+    model.fit(train_x, train_y)
     
     
     ## --- End of your code  --- ##
