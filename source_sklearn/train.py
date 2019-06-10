@@ -40,33 +40,39 @@ if __name__ == '__main__':
     # Do not need to change
     parser.add_argument('--output-data-dir', type=str, default=os.environ['SM_OUTPUT_DATA_DIR'])
     parser.add_argument('--model-dir', type=str, default=os.environ['SM_MODEL_DIR'])
-    parser.add_argument('--data-dir', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
+    # parser.add_argument('--data-dir', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
     
     ## TODO: Add any additional arguments that you will need to pass into your model
-    # parser.add_argument('--train', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
+    parser.add_argument('--train', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
+    parser.add_argument('--test', type=str, default=os.environ['SM_CHANNEL_TEST'])
     
     # args holds all passed-in arguments
     args = parser.parse_args()
 
     # Read in csv training file
-    training_dir = args.data_dir
-    train_data = pd.read_csv(os.path.join(training_dir, "train.csv"), header=None, names=None)
-    print("training path specified : " + train_data)
-
+    training_dir = os.path.join(args.train, "train.csv")
+    
+    print("training path specified : " + training_dir)
+    print(os.path.exists(training_dir))
+    
+    train_data = pd.read_csv(training_dir, header=None, names=None)
+    # print(train_data.head())
+    
     # Labels are in the first column
     train_y = train_data.iloc[:,0]
     train_x = train_data.iloc[:,1:]
     
+    # print(train_y.head())
+    # print(train_x.head())
     
     ## --- Your code here --- ##
     
     # I don't do anything just watch to see if it runs
 
-    ## TODO: Define a model 
-    # model = None    
+    ## TODO: Define a model   
     model = MLPClassifier(hidden_layer_sizes=(30,30,30), solver='lbfgs')
     
-    ''' # Need to add some arguments we want to pass...
+    ''' # Some possible parameters to tune
     MLPClassifier(activation='relu', alpha=0.0001, batch_size='auto', beta_1=0.9,
        beta_2=0.999, early_stopping=False, epsilon=1e-08,
        hidden_layer_sizes=(30, 30, 30), learning_rate='constant',
